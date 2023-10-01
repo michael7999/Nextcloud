@@ -1,6 +1,17 @@
 pipeline {
     agent any
     stages {
+        stage('OWASP Dependency-Check Vulnerabilities') {
+            steps {
+                dependencyCheck additionalArguments: ''' 
+                            -o './'
+                            -s './'
+                            -f 'ALL' 
+                            --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+        
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+            }
+        }
         stage('Bouwen en uitvoeren Docker-container') {
             steps {
                 script {
@@ -9,10 +20,10 @@ pipeline {
                 }
             }
         }
-        // Voeg hier andere stappen toe aan je CI/CD-pipeline
     }
     post {
         always {
+            archiveArtifacts artifacts: '**/dependency-check-report.xml', allowEmptyArchive: true
             // Schoonmaakstap (optioneel) - Stop en verwijder de container na gebruik
             sh 'docker stop $(docker ps -q --filter "ancestor=nextcloud")'
             sh 'docker rm $(docker ps -aq --filter "ancestor=nextcloud")'
