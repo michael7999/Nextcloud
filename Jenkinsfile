@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         SNYK_API_TOKEN = credentials('snyk-api-token')
-    }
+    }   /*
     stages {
         stage('OWASP Dependency-Check Vulnerabilities') {
             steps {
@@ -26,7 +26,7 @@ pipeline {
 
                     dependencyCheckPublisher(pattern: 'dependency-check-report.xml')
                 }
-            }
+            } */
         stage('Bouwen en uitvoeren Docker-container') {
             steps {
                 script {
@@ -44,7 +44,8 @@ pipeline {
         }
         stage('Snyk Security Scan') {
             steps {
-                sh """/usr/bin/npx snyk test --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto --token=${SNYK_API_TOKEN}"""
+                //sh """/usr/bin/npx snyk test --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto --token=${SNYK_API_TOKEN}"""
+                sh "/usr/bin/npx snyk test /home/michael/Nextcloud/docker --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto"
             }
         }
         /*stage('Scan Container Image for Vulnerabilities') {
