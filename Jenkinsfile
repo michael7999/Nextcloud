@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     // Run Clair to scan the Docker image
-                    clairImageName = 'your-image-name'
+                    clairImageName = 'nextcloud:10.0.0'
                     def clairScan = sh(script: "docker run -d --network host -p 6060:6060 --name clair arminc/clair-local-scan:latest", returnStatus: true)
                     if (clairScan == 0) {
                         sh(script: "docker run --network host -e CLAIR_ADDR=localhost:6060 -e DOCKER_IMAGE=${clairImageName} arminc/clair-scanner:latest")
