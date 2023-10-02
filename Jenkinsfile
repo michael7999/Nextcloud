@@ -2,9 +2,8 @@ pipeline {
     agent any
     environment {
         SNYK_API_TOKEN = credentials('snyk-api-token')
-    }   /*
-    stages {
-        stage('OWASP Dependency-Check Vulnerabilities') {
+    }   
+        /*stage('OWASP Dependency-Check Vulnerabilities') {
             steps {
                     script {
                         def additionalArguments = '''\
@@ -25,8 +24,8 @@ pipeline {
  
 
                     dependencyCheckPublisher(pattern: 'dependency-check-report.xml')
-                }
-            } */
+            }
+        }*/
         stage('Bouwen en uitvoeren Docker-container') {
             steps {
                 script {
