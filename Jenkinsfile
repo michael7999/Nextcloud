@@ -55,8 +55,6 @@ pipeline {
                 sh 'trivy filesystem --ignore-unfixed --vuln-type os,library --exit-code 1 --severity CRITICAL ./nodejs'
 
             }
-...
-
     }
     post {
         always {
