@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // Docker-container uitvoeren
-                    sh 'docker run -d -p 8089:80 nextcloud:23.0.5-fpm'
+                    sh 'docker run -d -p 8089:80 nextcloud:10.0.0'
                 }
             }
         }
@@ -25,8 +25,8 @@ pipeline {
         always {
             archiveArtifacts artifacts: '**/dependency-check-report.xml', allowEmptyArchive: true
             // Schoonmaakstap (optioneel) - Stop en verwijder de container na gebruik
-            sh 'docker stop $(docker ps -q --filter "ancestor=nextcloud:23.0.5-fpm")'
-            sh 'docker rm $(docker ps -aq --filter "ancestor=nextcloud:23.0.5-fpm")'
+            sh 'docker stop $(docker ps -q --filter "ancestor=nextcloud:10.0.0)'
+            sh 'docker rm $(docker ps -aq --filter "ancestor=nextcloud:10.0.0")'
         }
     }
 }
