@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        SNYK_API_TOKEN = credentials('snyk-api-token')
+    }
     stages {
         stage('OWASP Dependency-Check Vulnerabilities') {
             steps {
@@ -32,7 +35,12 @@ pipeline {
                 }
             }
         }
-        stage('Scan Container Image for Vulnerabilities') {
+        stage('Snyk Security Scan') {
+            steps {
+                sh "npx snyk test --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto --token=$SNYK_API_TOKEN"
+            }
+        }
+        /*stage('Scan Container Image for Vulnerabilities') {
             steps {
                 script {
                     // Run Clair to scan the Docker image
@@ -47,7 +55,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
     }
     post {
         always {
@@ -58,3 +66,4 @@ pipeline {
         }
     }
 }
+
