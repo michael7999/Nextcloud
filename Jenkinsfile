@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // Docker-container uitvoeren
-                    sh 'docker run -d -p 8089:80 nextcloud'
+                    sh 'docker run -d -p 8089:80 nextcloud:amd64-202101160431'
                 }
             }
         }
