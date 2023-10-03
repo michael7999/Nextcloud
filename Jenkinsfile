@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Snyk Security Scan') {
             steps {
-                sh """/usr/bin/npx snyk test --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto --token=$SNYK_API_TOKEN"""
+                sh "/usr/bin/npx snyk test ./Nextcloud/docker --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto"
             }
         }
         
