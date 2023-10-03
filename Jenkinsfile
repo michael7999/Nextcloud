@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        SNYK_API_TOKEN = credentials('snyk-api-token2')
+        SNYK_API_TOKEN = credentials('snyk-api-token')
     }
     stages {       
         stage('Bouwen en uitvoeren Docker-container') {
