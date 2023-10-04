@@ -19,7 +19,7 @@ pipeline {
                 }
              }
         }
-        stage('Snyk Authentication') {
+        stage('Snyk Authentication 3') {
             steps {
                 script {
                     sh "echo 'Debug: Attempting Snyk Authentication'"
