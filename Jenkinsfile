@@ -8,10 +8,11 @@ pipeline {
             steps {
                 script {
                     // Docker-container uitvoeren
-                    sh 'docker run -d -p 8089:80 nextcloud:10.0.0'
+                    sh 'docker run -d --network host -p 8089:80 nextcloud:10.0.0'
                 }
             }
         }
+        /*
         stage('Snyk Authentication') {
             steps {
                 script {
@@ -19,12 +20,14 @@ pipeline {
                 }
              }
         }
+        */
+        /*
         stage('Snyk Security Scan') {
             steps {
                 sh "/usr/bin/npx snyk test ./Nextcloud/docker --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto"
             }
         }
-        
+        */
         /*
         stage('Snyk Security Scan') {
             steps {
@@ -40,7 +43,7 @@ pipeline {
             }
         }
         */
-        /*stage('Scan Container Image for Vulnerabilities') {
+        stage('Scan Container Image for Vulnerabilities') {
             steps {
                 script {
                     // Run Clair to scan the Docker image
@@ -55,7 +58,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
     }
     post {
         always {
