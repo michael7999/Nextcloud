@@ -16,7 +16,7 @@ pipeline {
          stage('Genereer SBOM') {
             steps {
                 sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
-                sh 'syft cybersec-pipeline-todo-api-service --scope all-layers -o json > sbom-report.json'
+                sh 'syft nextcloud:10.0.0 all-layers -o json > sbom-report.json'
             }
         }
         /*
