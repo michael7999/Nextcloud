@@ -3,17 +3,17 @@ pipeline {
     environment {
         SNYK_API_TOKEN = credentials('snyk-api-token')
     }
-    stages {
-        stage('Build and Run Docker Container') {
+    stages {       
+        stage('Bouwen en uitvoeren Docker-container') {
             steps {
                 script {
-                    // Run the Docker container
-                    sh 'docker run -d --network host -p 8089:80 nextcloud:10.0.0'
+                    // Docker-container uitvoeren
+                    sh 'docker run -d -p 8089:80 nextcloud:10.0.0'
                 }
             }
         }
 
-        stage('Generate SBOM') {
+         stage('Genereer SBOM') {
             steps {
                 sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
                 sh 'syft cybersec-pipeline-todo-api-service --scope all-layers -o json > sbom-report.json'
@@ -25,16 +25,30 @@ pipeline {
                 script {
                     sh "/usr/bin/npx snyk auth ${SNYK_API_TOKEN}"
                 }
-            }
+             }
         }
-
         stage('Snyk Security Scan') {
             steps {
                 sh "/usr/bin/npx snyk test ./Nextcloud/docker --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto"
             }
         }
-
-        stage('Scan Container Image for Vulnerabilities') {
+        */
+        /*
+        stage('Snyk Security Scan') {
+            steps {
+                //sh """/usr/bin/npx snyk test --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto --token=${SNYK_API_TOKEN}"""
+                sh "/usr/bin/npx snyk test ./Nextcloud/docker --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto"
+            }
+        }
+        */
+        /*
+        stage('Snyk Security Scan') {
+            steps {
+                sh """/usr/bin/npx snyk test --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto --token=${SNYK_API_TOKEN}"""
+            }
+        }
+        */
+        /*stage('Scan Container Image for Vulnerabilities') {
             steps {
                 script {
                     // Run Clair to scan the Docker image
@@ -49,13 +63,12 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
     }
-    */
     post {
         always {
             archiveArtifacts artifacts: '**/dependency-check-report.xml', allowEmptyArchive: true
-            // Cleanup (optional) - Stop and remove the container after use
+            // Schoonmaakstap (optioneel) - Stop en verwijder de container na gebruik
             sh 'docker stop $(docker ps -q --filter "ancestor=nextcloud:10.0.0")'
             sh 'docker rm $(docker ps -aq --filter "ancestor=nextcloud:10.0.0")'
         }
