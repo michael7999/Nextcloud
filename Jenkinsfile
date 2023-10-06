@@ -15,9 +15,9 @@ pipeline {
          stage('Generate SBOM') {
             steps {
                 script {
-                    sh 'spdx create . --packages /path/to/output/directory/spdx.xml'
+                    sh 'spdx create . --packages /spdx.xml'
                 }
-                archiveArtifacts artifacts: '/path/to/output/directory/spdx.xml', allowEmptyArchive: true
+                archiveArtifacts artifacts: '/spdx.xml', allowEmptyArchive: true
             }
         }
         /*
