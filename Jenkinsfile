@@ -3,7 +3,7 @@ pipeline {
     environment {
         SNYK_API_TOKEN = credentials('snyk-api-token')
     }
-    stages {       
+    stages {
         stage('Bouwen en uitvoeren Docker-container') {
             steps {
                 script {
@@ -43,6 +43,7 @@ pipeline {
             }
         }
         */
+
         stage('Scan Container Image for Vulnerabilities') {
             steps {
                 script {
@@ -69,4 +70,3 @@ pipeline {
         }
     }
 }
-
