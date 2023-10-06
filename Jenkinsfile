@@ -15,9 +15,9 @@ pipeline {
          stage('Generate SBOM') {
             steps {
                 script {
-                    sh 'spdx create . --packages /spdx.xml'
+                    sh 'spdx create . --packages /home/quinten/.local/lib/python3.10/site-packagesspdx.xml'
                 }
-                archiveArtifacts artifacts: '/spdx.xml', allowEmptyArchive: true
+                archiveArtifacts artifacts: '/home/quinten/.local/lib/python3.10/site-packagesspdx.xml', allowEmptyArchive: true
             }
         }
         /*
