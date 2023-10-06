@@ -12,6 +12,14 @@ pipeline {
                 }
             }
         }
+
+         stage('Generate SBOM') {
+            steps {
+                sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
+                sh 'syft cybersec-pipeline-todo-api-service --scope all-layers -o json > sbom-report.json'
+            }
+        }
+        
         /*
         stage('Snyk Authentication') {
             steps {
@@ -43,7 +51,7 @@ pipeline {
             }
         }
         */
-
+        /*
         stage('Scan Container Image for Vulnerabilities') {
             steps {
                 script {
@@ -61,6 +69,7 @@ pipeline {
             }
         }
     }
+    */
     post {
         always {
             archiveArtifacts artifacts: '**/dependency-check-report.xml', allowEmptyArchive: true
