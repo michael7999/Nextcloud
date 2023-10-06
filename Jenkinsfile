@@ -13,7 +13,7 @@ pipeline {
             }
         }
 
-         stage('Generate SBOM') {
+         stage('Genereer SBOM') {
             steps {
                 sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
                 sh 'syft cybersec-pipeline-todo-api-service --scope all-layers -o json > sbom-report.json'
