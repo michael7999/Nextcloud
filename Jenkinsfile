@@ -21,12 +21,12 @@ pipeline {
         }
         stage('Dynamic Testing') {
             steps {
-                sh "nikto -h ${APP_IP} > nikto-report"                
+                sh "nikto -h ${APP_IP} > nikto-report.json"                
             }
         }
         stage('Port scan'){
             steps {
-                sh "nmap ${APP_IP} > nmap-report"
+                sh "nmap $APP_IP > nmap-report.json"
             }
         }
         stage('Snyk Authentication') {
@@ -38,8 +38,8 @@ pipeline {
         }
         stage('Snyk scan') {
             steps {
-                dir('/var/lib/jenkins/workspace/nextcloudPipe') {
-                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'nextCloud'
+                script{
+                    sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk-cli test nextcloud:10.0.0'
                 }
             }
         }
