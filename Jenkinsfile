@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         APP_IP = credentials('APP_IP')
+        SNYK_TOKEN = credentials('SNYK_TOKEN')
     }
     stages {               
         stage('Bouwen en uitvoeren Docker-container') {
