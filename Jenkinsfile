@@ -3,26 +3,19 @@ pipeline {
     environment {
         APP_IP = credentials('APP_IP')
     }
-    stages { 
-        stage('Create Docker Image') {
-            steps {
-                script {
-                    sh 'docker commit nextCloud nextcloud-custom:10.0.0'
-                }
-            }
-        }      
+    stages {               
         stage('Bouwen en uitvoeren Docker-container') {
             steps {
                 script {
                     // Docker-container uitvoeren
-                    sh 'docker run -d -p 8089:80 --name nextCloudCustom nextcloud-custom:10.0.0'
+                    sh 'docker run -d -p 8089:80 --name nextCloud nextcloud:10.0.0'
                 }
             }
         }
         stage('Generate SBOM') {
             steps {
                 sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
-                sh 'syft nextcloud-custom --scope all-layers -o json > sbom-report.json'
+                sh 'syft nextcloud:10.0.0 --scope all-layers -o json > sbom-report.json'
             }
         }
         stage('Dynamic Testing') {
