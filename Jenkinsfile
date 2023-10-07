@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        SNYK_API_TOKEN = credentials('snyk-api-token')
+        SNYK_TOKEN = credentials('snyk-api-token')
     }
     stages {       
         stage('Bouwen en uitvoeren Docker-container') {
@@ -34,7 +34,7 @@ pipeline {
         stage('Snyk Authentication') {
             steps {
                 script {
-                    sh "/usr/bin/npx snyk auth ${SNYK_API_TOKEN}"
+                    sh "/usr/bin/npx snyk auth ${SNYK_TOKEN}"
                 }
              }
         }
@@ -42,7 +42,7 @@ pipeline {
             steps {
                 dir('/var/lib/jenkins/workspace/Nextcloud') {
                     sh 'npm install'
-                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'snyk', snykTokenId: "${SNYK_API_TOKEN}", targetFile: 'package.json'
+                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'snyk', snykTokenId: "${SNYK_TOKEN}", targetFile: 'package.json'
                 }
             }
         }
