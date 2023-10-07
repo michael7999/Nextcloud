@@ -12,6 +12,7 @@ pipeline {
                 }
             }
         }
+        /*
          stage('Generate SBOM') {
             steps {
                 script {
@@ -20,6 +21,7 @@ pipeline {
                 archiveArtifacts artifacts: '/home/quinten/.local/lib/python3.10/site-packagesspdx.xml', allowEmptyArchive: true
             }
         }
+        */
         /*
          stage('Genereer SBOM') {
             steps {
@@ -36,9 +38,12 @@ pipeline {
                 }
              }
         }
-        stage('Snyk Security Scan') {
+        stage('Snyk scan') {
             steps {
-                sh "/usr/bin/npx snyk test ./Nextcloud/docker --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto"
+                dir('/var/lib/jenkins/workspace/Nextcloud') {
+                    sh 'npm install'
+                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'snyk', snykTokenId: 'SNYK_API_TOKEN', targetFile: 'package.json'
+                }
             }
         }
         */
