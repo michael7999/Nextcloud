@@ -55,8 +55,8 @@ pipeline {
           steps {
             echo 'Scanning your Docker container...'
             script {
-              sh '/usr/bin/npx snyk container test  nextcloud:10.0.0 --file=/var/lib/jenkins/workspace/Nextcloud/Dockerfile --format=junit > snyk-results.xml'  // Vervang 'your-docker-image' door de naam van je Docker-image
-             
+              sh '/usr/bin/npx snyk container test  nextcloud:10.0.0 --format=junit > snyk-results.xml'  // Vervang 'your-docker-image' door de naam van je Docker-image
+             //sh '/usr/bin/npx snyk container test  nextcloud:10.0.0 --file=/var/lib/jenkins/workspace/Nextcloud/Dockerfile --format=junit > snyk-results.xml'  // Vervang 'your-docker-image' door de naam van je Docker-image
             }
             
             }
