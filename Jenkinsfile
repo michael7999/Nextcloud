@@ -1,14 +1,26 @@
 pipeline {
     agent any
     environment {
+        DOCKER_IMAGE_NAME = 'nextcloud-custom'
+        DOCKER_IMAGE_TAG = '10.0.0'
+        DOCKER_BUILD_COMMAND = "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ."
+        DOCKER_RUN_COMMAND = "docker run -d -p 8081:8081 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
         SNYK_API_TOKEN = credentials('snyk-api-token')
     }
-    stages {       
-        stage('Bouwen en uitvoeren Docker-container') {
+    stages { 
+        stage('Build Docker Image') {
             steps {
-                script {
-                    // Docker-container uitvoeren
-                    sh 'docker run -d -p 8089:80 nextcloud:10.0.0'
+                sh script: "${DOCKER_BUILD_COMMAND}", returnStatus: true
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    error 'Docker build failed.'
+                }
+            }
+        }
+        stage('Run Docker Container') {
+            steps {
+                sh script: "${DOCKER_RUN_COMMAND}", returnStatus: true
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    error 'Docker container failed to start.'
                 }
             }
         }
