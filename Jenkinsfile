@@ -39,7 +39,7 @@ pipeline {
         stage('Snyk scan') {
             steps {
                 dir('/var/lib/jenkins/workspace/nextcloudPipe') {
-                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'nextCloud', snykTokenId: 'SNYK_TOKEN'
+                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'nextCloud'
                 }
             }
         }
