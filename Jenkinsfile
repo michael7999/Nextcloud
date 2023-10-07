@@ -34,16 +34,16 @@ pipeline {
                 }
              }
         }
-        /*
+        
         stage('Snyk scan') {
             steps {
-                dir('/var/lib/jenkins/workspace/cybersec-pipeline/backend') {
+                dir('/var/lib/jenkins/workspace/Nextcloud') {
                     sh 'npm install'
-                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'snyk', snykTokenId: 'SNYK_API_TOKEN', targetFile: 'package.json'
+                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'snyk', targetFile: 'Dockerfile'
                 }
             }
         }
-        */
+        /*
         stage('Snyk scan') {
             steps {
                 script {
@@ -62,6 +62,7 @@ pipeline {
             }
           }
     }
+    */
         /*
         stage('Snyk Security Scan') {
             steps {
