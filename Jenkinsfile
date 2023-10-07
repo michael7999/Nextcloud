@@ -90,12 +90,11 @@ pipeline {
           steps {
             echo 'Scanning your Docker container...'
             script {
-              sh '/usr/bin/npx snyk container test nextcloud:10.0.0'  // Vervang 'your-docker-image' door de naam van je Docker-image
+              sh '/usr/bin/npx snyk container test nextcloud:10.0.0' --json // Vervang 'your-docker-image' door de naam van je Docker-image
             }
             dir('/var/lib/jenkins/workspace/Nextcloud') {
                     sh 'npm install'
                     snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'snyk', targetFile: 'package.json'
-                    sh "/usr/bin/npx snyk protect --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto"
                 }
             }
           }
