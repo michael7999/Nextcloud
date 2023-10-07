@@ -48,7 +48,7 @@ pipeline {
           steps {
             echo 'Scanning your Docker container...'
             script {
-              sh '/usr/bin/npx snyk container test nextcloud:10.0.0 '  // Vervang 'your-docker-image' door de naam van je Docker-image
+              sh '/usr/bin/npx snyk nextcloud-custom test nextcloud:10.0.0 '  // Vervang 'your-docker-image' door de naam van je Docker-image
             }
             
             }
