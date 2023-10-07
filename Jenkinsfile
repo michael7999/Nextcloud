@@ -51,7 +51,7 @@ pipeline {
         */
         stage('Snyk scan') {
             steps {
-                dir('./Nextcloud'/docker) {
+                dir('./Nextcloud/docker') {
                     sh 'npm install'
                     snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'snyk'
                    
