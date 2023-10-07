@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     // Docker-container uitvoeren
-                    sh 'sudo docker run -d -p 8089:80 --name nextCloud nextcloud:10.0.0'
+                    sh 'docker run -d -p 8089:80 --name nextCloud nextcloud:10.0.0'
                 }
             }
         }
