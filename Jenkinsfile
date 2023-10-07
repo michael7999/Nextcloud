@@ -60,9 +60,9 @@ pipeline {
             }
             
             }
-          }
+          } */
     }
-    */
+    
         /*
         stage('Snyk Security Scan') {
             steps {
@@ -93,7 +93,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
     
     post {
         always {
