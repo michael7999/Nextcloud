@@ -43,7 +43,7 @@ pipeline {
                 }
             }
         }
-        /*
+        
         stage('Snyk scan') {
             steps {
                 script {
@@ -60,7 +60,7 @@ pipeline {
             }
             
             }
-          } */
+          } 
     }
     
         /*
