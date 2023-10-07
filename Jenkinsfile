@@ -90,7 +90,7 @@ pipeline {
           steps {
             echo 'Scanning your Docker container...'
             script {
-              sh '/usr/bin/npx snyk test container' // Vervang 'your-docker-image' door de naam van je Docker-image
+              sh '/usr/bin/npx snyk container test container' // Vervang 'your-docker-image' door de naam van je Docker-image
             }
           }
         }
