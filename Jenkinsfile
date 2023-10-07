@@ -98,7 +98,6 @@ pipeline {
                 }
             }
           }
-        }
         /*stage('Scan Container Image for Vulnerabilities') {
             steps {
                 script {
