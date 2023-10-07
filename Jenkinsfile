@@ -47,7 +47,7 @@ pipeline {
         stage('Snyk scan') {
             steps {
                 script {
-                    sh '/usr/bin/npx snyk test --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto --format=junit > snyk-results.xml'
+                    sh '/usr/bin/npx snyk test --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto'
                 }
             }
         }
