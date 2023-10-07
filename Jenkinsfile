@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Port scan'){
             steps {
-                sh "nmap $APP_IP > nmap-report.json"
+                sh "nmap ${APP_IP} > nmap-report.json"
             }
         }
         stage('Snyk Authentication') {
@@ -39,7 +39,7 @@ pipeline {
         stage('Snyk scan') {
             steps {
                 script{
-                    sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk-cli test nextcloud:10.0.0'
+                    sh 'snyk container test nextcloud:10.0.0'
                 }
             }
         }
