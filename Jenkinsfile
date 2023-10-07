@@ -64,7 +64,8 @@ pipeline {
             steps {
                 snykSecurity(
                     snykInstallation: 'snyk',
-                    failOnError: false
+                    failOnError: false,
+                    targetFile: 'Dockerfile-debian.template'
                 )
             }
         }
