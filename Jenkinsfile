@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker build -t my-nextcloud-image:1.0 .'
-                    sh 'snyk container test my-nextcloud-image:1.0 --file=/path/to/Dockerfile --all-projects --json-file=snyk-results.json'
+                    sh 'snyk container test my-nextcloud-image:1.0 --file=/var/lib/jenkins/Dockerfile --all-projects --json-file=snyk-results.json'
                 }
             }
         }
