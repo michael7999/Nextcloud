@@ -93,11 +93,11 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
     
     post {
         always {
-            archiveArtifacts artifacts: '**/dependency-check-report.xml', allowEmptyArchive: true
+            // archiveArtifacts artifacts: '**/dependency-check-report.xml', allowEmptyArchive: true
             junit '/var/lib/jenkins/workspace/Nextcloud/snyk-results.xml'
             publishSnykResults severity: 'high', testResultsFile: 'snyk-results.xml'
             // Schoonmaakstap (optioneel) - Stop en verwijder de container na gebruik
