@@ -97,7 +97,7 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: '**/dependency-check-report.xml', allowEmptyArchive: true
-            archiveArtifacts artifacts: '**/snyk-results.xml', allowEmptyArchive: true
+            junit 'snyk-results.xml'
             publishSnykResults severity: 'high', testResultsFile: 'snyk-results.xml'
             // Schoonmaakstap (optioneel) - Stop en verwijder de container na gebruik
             sh 'docker stop $(docker ps -q --filter "ancestor=nextcloud:10.0.0")'
