@@ -31,6 +31,7 @@ pipeline {
                 }
              }
         }
+        /*
         stage('Snyk scan') {
             steps {
                 dir('/var/lib/jenkins/workspace/cybersec-pipeline/backend') {
@@ -39,6 +40,16 @@ pipeline {
                 }
             }
         }
+        */
+         stage('Scan Docker Container') {
+          steps {
+            echo 'Scanning your Docker container...'
+            script {
+              sh '/usr/bin/npx snyk container test nextcloud:10.0.0 '  // Vervang 'your-docker-image' door de naam van je Docker-image
+            }
+            
+            }
+          }
     }
         /*
         stage('Snyk Security Scan') {
@@ -82,11 +93,4 @@ pipeline {
     }
 
 }
-    stage('Scan Docker Container') {
-      steps {
-        echo 'Scanning your Docker container...'
-        script {
-          sh '/usr/bin/npx snyk test your-docker-image' // Vervang 'your-docker-image' door de naam van je Docker-image
-        }
-      }
-    }
+   
