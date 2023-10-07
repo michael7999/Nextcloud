@@ -21,12 +21,12 @@ pipeline {
         }
         stage('Dynamic Testing') {
             steps {
-                sh 'nikto -h $APP_IP > nikto-report'                
+                sh "nikto -h ${APP_IP} > nikto-report"                
             }
         }
         stage('Port scan'){
             steps {
-                sh 'nmap $APP_IP > nmap-report'
+                sh "nmap ${APP_IP} > nmap-report"
             }
         }
         stage('Snyk Authentication') {
