@@ -1,21 +1,27 @@
 pipeline {
     agent any
     environment {
+        MYSQL_PASSWORD = credentials('jenkins-devops-db-pwd')
+        MYSQL_DATABASE = credentials('jenkins-devops-db')
+        MYSQL_USER = credentials('jenkins-devops-db-user')
+        DEBRICKED_TOKEN = credentials('DEBRICKED_TOKEN')
         APP_IP = credentials('APP_IP')
     }
-    stages {       
-        stage('Bouwen en uitvoeren Docker-container') {
+    stages {
+        stage('Build') {
             steps {
-                script {
-                    // Docker-container uitvoeren
-                    sh 'docker run -d -p 8089:80 --name nextCloud nextcloud:10.0.0'
-                }
+                sh 'docker compose build'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'docker compose up -d'
             }
         }
         stage('Generate SBOM') {
             steps {
                 sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
-                sh 'syft nextcloudPipe-nextCloud --scope all-layers -o json > sbom-report.json'
+                sh 'syft cybersec-pipeline-todo-api-service --scope all-layers -o json > sbom-report.json'
             }
         }
         stage('Dynamic Testing') {
@@ -31,9 +37,9 @@ pipeline {
         }
         stage('Snyk scan') {
             steps {
-                dir('/var/lib/jenkins/workspace/nextcloudPipe') {
+                dir('/var/lib/jenkins/workspace/cybersec-pipeline/backend') {
                     sh 'npm install'
-                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'nextCloud', snykTokenId: 'SNYK_TOKEN', targetFile: 'package.json'
+                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'snyk', snykTokenId: 'SNYK_TOKEN', targetFile: 'package.json'
                 }
             }
         }
