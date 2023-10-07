@@ -28,6 +28,13 @@ pipeline {
                 sh 'nmap $APP_IP > nmap-report'
             }
         }
+        stage('Snyk Authentication') {
+            steps {
+                script {
+                    sh "/usr/bin/npx snyk auth ${SNYK_TOKEN}"
+                }
+             }
+        }
         stage('Snyk scan') {
             steps {
                 dir('/var/lib/jenkins/workspace/nextcloudPipe') {
