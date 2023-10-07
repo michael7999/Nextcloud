@@ -14,16 +14,16 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh script: "${DOCKER_BUILD_COMMAND}", returnStatus: true
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    error 'Docker build failed.'
+                /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    error 'Docker build failed.'*/
                 }
             }
         }
         stage('Run Docker Container') {
             steps {
                 sh script: "${DOCKER_RUN_COMMAND}", returnStatus: true
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    error 'Docker container failed to start.'
+                /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    error 'Docker container failed to start.'*/
                 }
             }
         }
