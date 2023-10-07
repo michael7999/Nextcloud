@@ -5,7 +5,7 @@ pipeline {
         DOCKER_IMAGE_TAG = '10.0.0'
         DOCKER_BUILD_COMMAND = "docker build --build-arg PHP_VERSION=7.4 --build-arg VARIANT=apache --build-arg DEBIAN_VERSION=buster -t nextcloud:10.0.0 ." 
         DOCKER_RUN_COMMAND = "docker run -d -p 8081:8081 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
-        SNYK_API_TOKEN = credentials('snyk-api-token')
+        SNYK_TOKEN = credentials('snyk-api-token')
         PHP_VERSION = '8.0'
         VARIANT = 'apache'
         DEBIAN_VERSION = 'bullseye'
@@ -30,7 +30,7 @@ pipeline {
         stage('Snyk Authentication') {
             steps {
                 script {
-                    sh "/usr/bin/npx snyk auth ${SNYK_API_TOKEN}"
+                    sh "/usr/bin/npx snyk auth ${SNYK_TOKEN}"
                 }
              }
         }
