@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = 'nextcloud'
         DOCKER_IMAGE_TAG = '10.0.0'
-        DOCKER_BUILD_COMMAND = "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ."
+        DOCKER_BUILD_COMMAND = "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} "
         DOCKER_RUN_COMMAND = "docker run -d -p 8081:8081 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
         SNYK_API_TOKEN = credentials('snyk-api-token')
         PHP_VERSION = '8.0'
