@@ -49,6 +49,7 @@ pipeline {
             }
         }
         */
+        /*
         stage('Snyk scan') {
             steps {
                 dir('./') {
@@ -58,7 +59,15 @@ pipeline {
                 }
             }
         }
-        
+        */
+        stage('Snyk scan') {
+            steps {
+                snykSecurity(
+                    snykInstallation: 'snyk',
+                    failOnError: false
+                )
+            }
+        }
         /*
         stage('Snyk Security Scan') {
             steps {
