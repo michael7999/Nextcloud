@@ -57,8 +57,8 @@ pipeline {
             archiveArtifacts artifacts: '**/sbom-report.json', allowEmptyArchive: true
             archiveArtifacts artifacts: '**/nikto-report', allowEmptyArchive: true
             archiveArtifacts artifacts: '**/nmap-report', allowEmptyArchive: true
+            sh 'docker stop nextCloud'
             sh 'docker rm nextCloud'
-            sh 'docker rmi nextcloud-custom:10.0.0'
         }
     }
 }
