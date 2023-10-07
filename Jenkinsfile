@@ -13,12 +13,12 @@ pipeline {
                 }
             }
         }
-        stage('Generate SBOM') {
-            steps {
-                sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
-                sh 'syft nextcloud:10.0.0 --scope all-layers -o json > sbom-report.json'
-            }
-        }
+        // stage('Generate SBOM') {
+        //     steps {
+        //         sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
+        //         sh 'syft nextcloud:10.0.0 --scope all-layers -o json > sbom-report.json'
+        //     }
+        // }
         stage('Dynamic Testing') {
             steps {
                 sh "nikto -h ${APP_IP} > nikto-report.json"                
@@ -38,8 +38,9 @@ pipeline {
         }
         stage('Snyk scan') {
             steps {
-                script{
-                    sh 'snyk container test nextcloud:10.0.0'
+                script {
+                    sh 'docker build -t my-nextcloud-image:1.0 .'
+                    sh 'snyk container test my-nextcloud-image:1.0 --file=/root/Nextcloud/Dockerfile'
                 }
             }
         }
