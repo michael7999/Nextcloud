@@ -49,6 +49,9 @@ pipeline {
             echo 'Scanning your Docker container...'
             script {
               sh '/usr/bin/npx snyk container test  nextcloud:10.0.0 '  // Vervang 'your-docker-image' door de naam van je Docker-image
+              if (snykExitCode != 0) {
+                    error 'Snyk scan failed.'
+                }  
             }
             
             }
