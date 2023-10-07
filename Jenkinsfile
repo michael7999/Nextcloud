@@ -34,7 +34,7 @@ pipeline {
                 }
              }
         }
-        /*
+        
         stage('Snyk scan') {
             steps {
                 dir('/var/lib/jenkins/workspace/Nextcloud') {
@@ -43,7 +43,7 @@ pipeline {
                 }
             }
         }
-        */
+        
         stage('Snyk scan2') {
             steps {
                 script {
