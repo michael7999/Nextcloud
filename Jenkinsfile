@@ -15,16 +15,16 @@ pipeline {
             steps {
                 sh script: "${DOCKER_BUILD_COMMAND}", returnStatus: true
                 /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    error 'Docker build failed.'*/
-                }
+                    error 'Docker build failed.'
+                }*/
             }
         }
         stage('Run Docker Container') {
             steps {
                 sh script: "${DOCKER_RUN_COMMAND}", returnStatus: true
                 /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    error 'Docker container failed to start.'*/
-                }
+                    error 'Docker container failed to start.'
+                }*/
             }
         }
         stage('Snyk Authentication') {
