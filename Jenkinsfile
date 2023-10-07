@@ -1,21 +1,80 @@
 pipeline {
     agent any
-    stages {
+    environment {
+        SNYK_API_TOKEN = credentials('snyk-api-token')
+    }
+    stages {       
         stage('Bouwen en uitvoeren Docker-container') {
             steps {
                 script {
                     // Docker-container uitvoeren
-                    sh 'docker run -d -p 8089:80 nextcloud'
+                    sh 'docker run -d -p 8089:80 nextcloud:10.0.0'
                 }
             }
         }
-        // Voeg hier andere stappen toe aan je CI/CD-pipeline
-    }
-    post {
-        always {
-            // Schoonmaakstap (optioneel) - Stop en verwijder de container na gebruik
-            sh 'docker stop $(docker ps -q --filter "ancestor=nextcloud")'
-            sh 'docker rm $(docker ps -aq --filter "ancestor=nextcloud")'
+        stage('Snyk Authentication') {
+            steps {
+                script {
+                    sh "/usr/bin/npx snyk auth ${SNYK_API_TOKEN}"
+                }
+             }
+        }
+        stage('Snyk scan') {
+            steps {
+                dir('/var/lib/jenkins/workspace/cybersec-pipeline/backend') {
+                    sh 'npm install'
+                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'snyk', snykTokenId: 'SNYK_API_TOKEN', targetFile: 'package.json'
+                }
+            }
         }
     }
+        /*
+        stage('Snyk Security Scan') {
+            steps {
+                //sh """/usr/bin/npx snyk test --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto --token=${SNYK_API_TOKEN}"""
+                sh "/usr/bin/npx snyk test /home/michael/Nextcloud/docker --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto"
+            }
+        }
+        */
+        /*
+        stage('Snyk Security Scan') {
+            steps {
+                sh """/usr/bin/npx snyk test --all-projects --all-projects-depth=1 --all-projects-recursive --all-sub-projects-recursive --all-sub-projects-depth=1 --all-projects-tracked=auto --token=${SNYK_API_TOKEN}"""
+            }
+        }
+        */
+        /*stage('Scan Container Image for Vulnerabilities') {
+            steps {
+                script {
+                    // Run Clair to scan the Docker image
+                    clairImageName = 'nextcloud:10.0.0'
+                    def clairScan = sh(script: "docker run -d --network host -p 6060:6060 --name clair arminc/clair-local-scan:latest", returnStatus: true)
+                    if (clairScan == 0) {
+                        sh(script: "docker run --network host -e CLAIR_ADDR=localhost:6060 -e DOCKER_IMAGE=${clairImageName} arminc/clair-scanner:latest")
+                        sh 'docker stop clair'
+                        sh 'docker rm clair'
+                    } else {
+                        error('Failed to start Clair scanner')
+                    }
+                }
+            }
+        }*/
+    
+    post {
+        always {
+            archiveArtifacts artifacts: '**/dependency-check-report.xml', allowEmptyArchive: true
+            // Schoonmaakstap (optioneel) - Stop en verwijder de container na gebruik
+            sh 'docker stop $(docker ps -q --filter "ancestor=nextcloud:10.0.0")'
+            sh 'docker rm $(docker ps -aq --filter "ancestor=nextcloud:10.0.0")'
+        }
+    }
+
 }
+    stage('Scan Docker Container') {
+      steps {
+        echo 'Scanning your Docker container...'
+        script {
+          sh '/usr/bin/npx snyk test your-docker-image' // Vervang 'your-docker-image' door de naam van je Docker-image
+        }
+      }
+    }
