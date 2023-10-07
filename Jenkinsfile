@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     // Docker-container uitvoeren
-                    sh 'docker run -d -p 8089:80 nextcloud:10.0.0'
+                    sh 'docker run -d -p 8089:80 --name container nextcloud:10.0.0'
                 }
             }
         }
@@ -60,6 +60,7 @@ pipeline {
             }
         }
         */
+        /*
         stage('Snyk scan') {
             steps {
                 snykSecurity(
@@ -69,6 +70,7 @@ pipeline {
                 )
             }
         }
+        */
         /*
         stage('Snyk Security Scan') {
             steps {
@@ -84,6 +86,14 @@ pipeline {
             }
         }
         */
+        stage('Scan Docker Container') {
+          steps {
+            echo 'Scanning your Docker container...'
+            script {
+              sh '/usr/bin/npx snyk test container' // Vervang 'your-docker-image' door de naam van je Docker-image
+            }
+          }
+        }
         /*stage('Scan Container Image for Vulnerabilities') {
             steps {
                 script {
