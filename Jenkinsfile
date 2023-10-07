@@ -30,7 +30,7 @@ pipeline {
             }
         }
         */
-        /*
+        
         stage('Snyk Authentication') {
             steps {
                 script {
@@ -46,7 +46,7 @@ pipeline {
                 }
             }
         }
-        */
+        
         /*
         stage('Snyk Security Scan') {
             steps {
