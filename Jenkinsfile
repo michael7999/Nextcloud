@@ -31,8 +31,7 @@ pipeline {
         stage('Snyk scan') {
             steps {
                 dir('/var/lib/jenkins/workspace/nextcloudPipe') {
-                    sh 'npm install'
-                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'nextCloud', snykTokenId: 'SNYK_TOKEN', targetFile: 'package.json'
+                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'nextCloud', snykTokenId: 'SNYK_TOKEN'
                 }
             }
         }
