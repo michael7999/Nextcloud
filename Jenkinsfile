@@ -6,7 +6,7 @@ pipeline {
         DOCKER_BUILD_COMMAND = "docker build --build-arg PHP_VERSION=7.4 --build-arg VARIANT=apache --build-arg DEBIAN_VERSION=buster -t nextcloud:23.0.10 ." 
         DOCKER_RUN_COMMAND = "docker run -d --name nextCloud -p 8081:80 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
         APP_IP = credentials('APP_IP')
-        SNYK_TOKEN = credentials('SNYK_TOKEN')
+        SNYK_TOKEN = credentials('snyk-api-token')
         NIKTO = credentials('nikto_ip_port')
     }
     stages { 
@@ -30,7 +30,7 @@ pipeline {
         //     steps {
         //         script {
         //             // Docker-container uitvoeren
-        //             sh 'docker run -d -p 8089:80 --name nextCloud nextcloud:10.0.0'
+        //             sh 'docker run -d -p 8081:80 --name nextCloud nextcloud:10.0.0'
         //         }
         //     }
         // }
@@ -63,19 +63,26 @@ pipeline {
                     sh "/usr/bin/npx snyk auth ${SNYK_TOKEN}"
                 }
              }
-        }
+        }/*
         stage('Snyk scan') {
             steps {
                 script {
                     // sh 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile > dependency-check-report.txt'
                     try {
-                        sh 'snyk container test nextcloud:23.0.10 --file=package.json > dependency-check-report.txt'
+                        sh 'snyk container test nextcloud:23.0.10 --file=Dockerfile > dependency-check-report.txt'
                     } catch (Exception e) {
                         echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
                     }
                 }
             }
-        }
+        }*/
+        stage('Snyk Scan') {
+            steps {
+                dir('/var/lib/jenkins/workspace/Nextcloud') {  // Navigeer naar de map waar je Dockerfile zich bevindt
+                    snykSecurity failOnError: false, severity: 'high', snykInstallation: 'snyk', targetFile: 'Dockerfile'
+                }
+            }
+}
         /*
         stage('Vault'){
             steps {
