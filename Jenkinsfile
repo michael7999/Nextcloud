@@ -33,12 +33,12 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Generate SBOM') {
-        //     steps {
-        //         sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
-        //         sh 'syft nextcloud:10.0.0 --scope all-layers -o json > sbom-report.json'
-        //     }
-        // }
+        stage('Generate SBOM') {
+            steps {
+                sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
+                sh 'syft nextcloud:10.0.0 --scope all-layers -o json > sbom-report.json'
+            }
+        }
         stage('Dynamic Testing') {
             steps {
                 // webserver running ? 
@@ -62,14 +62,11 @@ pipeline {
                 script {
                     // sh 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile > dependency-check-report.txt'
                     try {
-                        sh 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile > dependency-check-report.txt'
+                        sh 'snyk container test nextcloud:10.0.0 --file=Dockerfile > dependency-check-report.txt'
                     } catch (Exception e) {
                         echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
                     }
                 }
-                // dir('/var/lib/jenkins/workspace/nextcloudPipe') {
-                //     snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'nextCloud', targetFile: 'Dockerfile'
-                // }
             }
         }
         /*
