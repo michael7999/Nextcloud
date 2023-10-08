@@ -97,7 +97,7 @@ RUN { \
 VOLUME /var/www/html
 
 # Stel de Nextcloud-versie in
-ENV NEXTCLOUD_VERSION 10.0.0
+ENV NEXTCLOUD_VERSION 23.0.10
 
 # Voer deze container uit wanneer gestart
 CMD ["php", "-S", "0.0.0.0:8081", "-t", "/var/www/html"]

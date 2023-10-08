@@ -2,9 +2,9 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE_NAME = 'nextcloud'
-        DOCKER_IMAGE_TAG = '10.0.0'
-        DOCKER_BUILD_COMMAND = "docker build --build-arg PHP_VERSION=7.4 --build-arg VARIANT=apache --build-arg DEBIAN_VERSION=buster -t nextcloud:10.0.0 ." 
-        DOCKER_RUN_COMMAND = "docker run -d --name nextCloud -p 8081:8081 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+        DOCKER_IMAGE_TAG = '23.0.10'
+        DOCKER_BUILD_COMMAND = "docker build --build-arg PHP_VERSION=7.4 --build-arg VARIANT=apache --build-arg DEBIAN_VERSION=buster -t nextcloud:23.0.10 ." 
+        DOCKER_RUN_COMMAND = "docker run -d --name nextCloud -p 8081:80 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
         APP_IP = credentials('APP_IP')
         SNYK_TOKEN = credentials('SNYK_TOKEN')
     }
@@ -36,13 +36,13 @@ pipeline {
         stage('Generate SBOM') {
             steps {
                 sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
-                sh 'syft nextcloud:10.0.0 --scope all-layers -o json > sbom-report.json'
+                sh 'syft nextcloud:23.0.10 --scope all-layers -o json > sbom-report.json'
             }
         }
         stage('Dynamic Testing') {
             steps {
                 // webserver running ? 
-                sh "nikto -h ${APP_IP} > nikto-report.json"                
+                sh "nikto -h ${APP_IP}:8081 > nikto-report.json"                
             }
         }
         stage('Port scan'){
@@ -62,7 +62,7 @@ pipeline {
                 script {
                     // sh 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile > dependency-check-report.txt'
                     try {
-                        sh 'snyk container test nextcloud:10.0.0 --file=Dockerfile > dependency-check-report.txt'
+                        sh 'snyk container test nextcloud:23.0.10 --file=Dockerfile > dependency-check-report.txt'
                     } catch (Exception e) {
                         echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
                     }

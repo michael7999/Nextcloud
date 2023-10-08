@@ -12,10 +12,10 @@ services:
       - POSTGRES_PASSWORD=nextcloud
 
   app:
-    image: nextcloud
+    image: nextcloud:23.0.10
     restart: always
     ports:
-      - 8080:80
+      - 8081:80
     volumes:
       - nextcloud:/var/www/html
     environment:
