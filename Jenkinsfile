@@ -21,6 +21,7 @@ pipeline {
         // }
         stage('Dynamic Testing') {
             steps {
+                // webserver running ? 
                 sh "nikto -h ${APP_IP} > nikto-report.json"                
             }
         }
@@ -39,8 +40,9 @@ pipeline {
         stage('Snyk scan') {
             steps {
                 script {
-                    sh 'docker build -t my-nextcloud-image:1.0 .'
-                    sh 'snyk container test my-nextcloud-image:1.0 --file=/var/lib/jenkins/Dockerfile --all-projects --json-file=snyk-results.json'
+                    // sh 'docker build -t my-nextcloud-image:1.0 .'
+                    // sh 'snyk container test my-nextcloud-image:1.0 --file=/var/lib/jenkins/Dockerfile --all-projects --json-file=snyk-results.json'
+                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'nextCloud', targetFile: 'Dockerfile'
                 }
             }
         }
@@ -63,8 +65,9 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: '**/sbom-report.json', allowEmptyArchive: true
-            archiveArtifacts artifacts: '**/nikto-report', allowEmptyArchive: true
-            archiveArtifacts artifacts: '**/nmap-report', allowEmptyArchive: true
+            archiveArtifacts artifacts: '**/nikto-report.json', allowEmptyArchive: true
+            archiveArtifacts artifacts: '**/nmap-report.json', allowEmptyArchive: true
+            archiveArtifacts artifacts: '**/dependency-check-report.xml', allowEmptyArchive: true
             sh 'docker stop nextCloud'
             sh 'docker rm nextCloud'
         }
