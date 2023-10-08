@@ -9,14 +9,14 @@ pipeline {
         SNYK_TOKEN = credentials('SNYK_TOKEN')
     }
     stages { 
-        stage('Build Docker Image') {
-            steps {
-                sh script: "${DOCKER_BUILD_COMMAND}", returnStatus: true
-                /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    error 'Docker build failed.'
-                }*/
-            }
-        }
+        // stage('Build Docker Image') {
+        //     steps {
+        //         sh script: "${DOCKER_BUILD_COMMAND}", returnStatus: true
+        //         /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+        //             error 'Docker build failed.'
+        //         }*/
+        //     }
+        // }
         stage('Run Docker Container') {
             steps {
                 sh script: "${DOCKER_RUN_COMMAND}", returnStatus: true
@@ -33,12 +33,12 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Generate SBOM') {
-        //     steps {
-        //         sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
-        //         sh 'syft nextcloud:23.0.10 --scope all-layers -o json > sbom-report.json'
-        //     }
-        // }
+        stage('Generate SBOM') {
+            steps {
+                sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
+                sh 'syft nextcloud:23.0.10 --scope all-layers -o json > sbom-report.json'
+            }
+        }
         stage('Dynamic Testing') {
             steps {
                 // webserver running ? 
