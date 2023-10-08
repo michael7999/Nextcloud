@@ -60,8 +60,7 @@ pipeline {
         stage('Snyk scan') {
             steps {
                 script {
-                    def snykCommand = 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile --all-projects > dependency-check-report.xml'
-                    def returnCode = sh(script: snykCommand, returnStatus: true)
+                    sh 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile > dependency-check-report.txt'
                 }
                 // dir('/var/lib/jenkins/workspace/nextcloudPipe') {
                 //     snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'nextCloud', targetFile: 'Dockerfile'
@@ -89,7 +88,7 @@ pipeline {
             archiveArtifacts artifacts: '**/sbom-report.json', allowEmptyArchive: true
             archiveArtifacts artifacts: '**/nikto-report.json', allowEmptyArchive: true
             archiveArtifacts artifacts: '**/nmap-report.json', allowEmptyArchive: true
-            archiveArtifacts artifacts: '**/dependency-check-report.xml', allowEmptyArchive: true
+            archiveArtifacts artifacts: '**/dependency-check-report.txt', allowEmptyArchive: true
             sh 'docker stop nextCloud'
             sh 'docker rm nextCloud'
         }
