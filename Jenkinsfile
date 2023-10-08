@@ -41,8 +41,8 @@ pipeline {
         }
         stage('Dynamic Testing') {
             steps {
-                // webserver running ? 
-                sh "nikto -h ${APP_IP}:8081 > nikto-report.json"                
+                sh "curl ${APP_IP}"
+                sh "nikto -h ${APP_IP} > nikto-report.json"                
             }
         }
         stage('Port scan'){
