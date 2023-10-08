@@ -44,7 +44,7 @@ pipeline {
                     // sh 'snyk container test my-nextcloud-image:1.0 --file=/var/lib/jenkins/Dockerfile --all-projects --json-file=snyk-results.json'
                 // }
                 dir('/var/lib/jenkins/workspace/nextcloudPipe') {
-                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'snyk', targetFile: 'Dockerfile'
+                    snykSecurity failOnError: false, severity: 'critical', snykInstallation: 'nextCloud', targetFile: 'Dockerfile'
                 }
             }
         }
