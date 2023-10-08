@@ -33,12 +33,12 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Generate SBOM') {
-            steps {
-                sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
-                sh 'syft nextcloud:23.0.10 --scope all-layers -o json > sbom-report.json'
-            }
-        }
+        // stage('Generate SBOM') {
+        //     steps {
+        //         sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
+        //         sh 'syft nextcloud:23.0.10 --scope all-layers -o json > sbom-report.json'
+        //     }
+        // }
         stage('Dynamic Testing') {
             steps {
                 // webserver running ? 
