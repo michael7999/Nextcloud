@@ -60,7 +60,7 @@ pipeline {
         stage('Snyk scan') {
             steps {
                 script {
-                    def snykCommand = 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile --all-projects > dependency-check-report.xml || true'
+                    def snykCommand = 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile --all-projects > dependency-check-report.xml'
                     def returnCode = sh(script: snykCommand, returnStatus: true)
                 }
                 // dir('/var/lib/jenkins/workspace/nextcloudPipe') {
