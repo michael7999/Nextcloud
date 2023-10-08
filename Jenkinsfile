@@ -1,18 +1,38 @@
 pipeline {
     agent any
     environment {
+        DOCKER_IMAGE_NAME = 'nextcloud'
+        DOCKER_IMAGE_TAG = '10.0.0'
+        DOCKER_BUILD_COMMAND = "docker build --build-arg PHP_VERSION=7.4 --build-arg VARIANT=apache --build-arg DEBIAN_VERSION=buster -t nextcloud:10.0.0 ." 
+        DOCKER_RUN_COMMAND = "docker run -d --name nextCloud -p 8081:8081 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
         APP_IP = credentials('APP_IP')
         SNYK_TOKEN = credentials('SNYK_TOKEN')
     }
-    stages {               
-        stage('Bouwen en uitvoeren Docker-container') {
+    stages { 
+        stage('Build Docker Image') {
             steps {
-                script {
-                    // Docker-container uitvoeren
-                    sh 'docker run -d -p 8089:80 --name nextCloud nextcloud:10.0.0'
-                }
+                sh script: "${DOCKER_BUILD_COMMAND}", returnStatus: true
+                /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    error 'Docker build failed.'
+                }*/
             }
         }
+        stage('Run Docker Container') {
+            steps {
+                sh script: "${DOCKER_RUN_COMMAND}", returnStatus: true
+                /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    error 'Docker container failed to start.'
+                }*/
+            }
+        }              
+        // stage('Bouwen en uitvoeren Docker-container') {
+        //     steps {
+        //         script {
+        //             // Docker-container uitvoeren
+        //             sh 'docker run -d -p 8089:80 --name nextCloud nextcloud:10.0.0'
+        //         }
+        //     }
+        // }
         // stage('Generate SBOM') {
         //     steps {
         //         sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
