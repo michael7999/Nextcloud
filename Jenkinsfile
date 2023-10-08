@@ -7,6 +7,7 @@ pipeline {
         DOCKER_RUN_COMMAND = "docker run -d --name nextCloud -p 8081:80 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
         APP_IP = credentials('APP_IP')
         SNYK_TOKEN = credentials('SNYK_TOKEN')
+        NIKTO = credentials('nikto_ip_port')
     }
     stages { 
         // stage('Build Docker Image') {
@@ -41,8 +42,8 @@ pipeline {
         }
         stage('Dynamic Testing') {
             steps {
-                sh "curl ${APP_IP}"
-                sh "nikto -h ${APP_IP} > nikto-report.json"                
+                sh "curl ${NIKTO}"
+                sh "nikto -h 192.168.146.51:8081 > nikto-report.json"                
             }
         }
         stage('Port scan'){
