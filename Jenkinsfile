@@ -42,12 +42,14 @@ pipeline {
         }
         stage('Dynamic Testing') {
             steps {
-                try {
-                    sh "curl ${NIKTO}"
-                    sh "nikto -h ${NIKTO} > nikto-report.json"
-                } catch (Exception e) {
-                    echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
-                }             
+                script {
+                    try {
+                        sh "curl ${NIKTO}"
+                        sh "nikto -h ${NIKTO} > nikto-report.json"
+                    } catch (Exception e) {
+                        echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
+                    } 
+                }                            
             }
         }
         stage('Port scan'){
