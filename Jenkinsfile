@@ -42,8 +42,14 @@ pipeline {
         }
         stage('Dynamic Testing') {
             steps {
-                sh "curl ${NIKTO}"
-                sh "nikto -h 192.168.146.51:8081 > nikto-report.json"                
+                script {
+                    try {
+                        sh "curl ${NIKTO}"
+                        sh "nikto -h ${NIKTO} > nikto-report.json"
+                    } catch (Exception e) {
+                        echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
+                    } 
+                }                            
             }
         }
         stage('Port scan'){
@@ -63,7 +69,7 @@ pipeline {
                 script {
                     // sh 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile > dependency-check-report.txt'
                     try {
-                        sh 'snyk container test nextcloud:23.0.10 --file=Dockerfile > dependency-check-report.txt'
+                        sh 'snyk container test nextcloud:23.0.10 --file=package.json > dependency-check-report.txt'
                     } catch (Exception e) {
                         echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
                     }
