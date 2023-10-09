@@ -58,8 +58,8 @@ pipeline {
         // }
         stage("Clone") {
             steps {
-               git url: "${SNYK_TOKEN}", branch: 'kelvinTest' //example file
-               sh 'zip -r nextCloud.zip .'
+               git url: 'git@github.com:michael7999/Nextcloud.git', branch: 'kelvinTest' //example file
+            //    sh 'zip -r nextCloud.zip .'
             }
         }
         stage("Scan") {
