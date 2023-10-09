@@ -63,7 +63,7 @@ pipeline {
                     sh "/usr/bin/npx snyk auth ${SNYK_TOKEN}"
                 }
              }
-        }/*
+        }
         stage('Snyk scan') {
             steps {
                 script {
@@ -75,14 +75,16 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
+        /*
         stage('Snyk Scan') {
             steps {
                 dir('/var/lib/jenkins/workspace/Nextcloud') {  // Navigeer naar de map waar je Dockerfile zich bevindt
                     snykSecurity failOnError: false, severity: 'high', snykInstallation: 'snyk', targetFile: 'Dockerfile'
                 }
             }
-}
+        }
+        */
         /*
         stage('Vault'){
             steps {
