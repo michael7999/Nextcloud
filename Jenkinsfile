@@ -69,7 +69,7 @@ pipeline {
                 script {
                     // sh 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile > dependency-check-report.txt'
                     try {
-                        sh 'snyk container test nextcloud:23.0.10 --json > dependency-check-report.json'
+                        sh 'snyk container test nextcloud:23.0.10 --file=Dockerfile > dependency-check-report.txt'
                     } catch (Exception e) {
                         echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
                     }
@@ -106,7 +106,7 @@ pipeline {
                     archiveArtifacts artifacts: '**/sbom-report.json', allowEmptyArchive: true
                     archiveArtifacts artifacts: '**/nikto-report.json', allowEmptyArchive: true
                     archiveArtifacts artifacts: '**/nmap-report.json', allowEmptyArchive: true
-                    archiveArtifacts artifacts: '**/dependency-check-report.json', allowEmptyArchive: true
+                    archiveArtifacts artifacts: '**/dependency-check-report.txt', allowEmptyArchive: true
                     sh 'docker stop nextCloud'
                     sh 'docker rm nextCloud'
                 
