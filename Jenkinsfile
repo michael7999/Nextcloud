@@ -4,7 +4,7 @@ pipeline {
         DOCKER_IMAGE_NAME = 'nextcloud'
         DOCKER_IMAGE_TAG = '23.0.10'
         DOCKER_BUILD_COMMAND = "docker build --build-arg PHP_VERSION=7.4 --build-arg VARIANT=apache --build-arg DEBIAN_VERSION=buster -t nextcloud:23.0.10 ." 
-        DOCKER_RUN_COMMAND = "docker run -d --name nextCloud -p 8081:80 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+        DOCKER_RUN_COMMAND = "docker run -d --name nextCloud -p 8091:80 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
         APP_IP = credentials('APP_IP')
         SNYK_TOKEN = credentials('snyk-api-token')
         NIKTO = credentials('nikto_ip_port')
