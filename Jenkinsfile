@@ -9,31 +9,12 @@ pipeline {
         SNYK_TOKEN = credentials('SNYK_TOKEN')
         NIKTO = credentials('nikto_ip_port')
     }
-    stages { 
-        // stage('Build Docker Image') {
-        //     steps {
-        //         sh script: "${DOCKER_BUILD_COMMAND}", returnStatus: true
-        //         /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-        //             error 'Docker build failed.'
-        //         }*/
-        //     }
-        // }
+    stages {
         stage('Run Docker Container') {
             steps {
                 sh script: "${DOCKER_RUN_COMMAND}", returnStatus: true
-                /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    error 'Docker container failed to start.'
-                }*/
             }
-        }              
-        // stage('Bouwen en uitvoeren Docker-container') {
-        //     steps {
-        //         script {
-        //             // Docker-container uitvoeren
-        //             sh 'docker run -d -p 8089:80 --name nextCloud nextcloud:10.0.0'
-        //         }
-        //     }
-        // }
+        }
         stage('Generate SBOM') {
             steps {
                 sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
@@ -67,12 +48,34 @@ pipeline {
         stage('Snyk scan') {
             steps {
                 script {
-                    // sh 'snyk container test my-nextcloud-image:1.0 --file=Dockerfile > dependency-check-report.txt'
                     try {
                         sh 'snyk container test nextcloud:23.0.10 --file=Dockerfile > dependency-check-report.txt'
                     } catch (Exception e) {
                         echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
                     }
+                }
+            }
+        }
+        stage("Clone") {
+            steps {
+               git url: 'https://github.com/michael7999/Nextcloud', branch: 'kelvinTest' //example file
+               sh 'zip -r nextCloud.zip .'
+            }
+        }
+        stage("Scan") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'codethreat_credentials', usernameVariable: 'username', passwordVariable: 'password')]) {
+                    CodeThreatScan(
+                        ctServer: env.ctServer_URL,
+                        fileName:"nextCloud.zip",
+                        maxNumberOfHigh: 23,
+                        maxNumberOfCritical: 23,
+                        weaknessIs: ".*injection,buffer.over.read,mass.assigment", 
+                        condition: "OR",
+                        project_name: "nextCloudProject",
+                        credentialsId: "codethreat_credentials",
+                        organization_name: "kelvin-ap@github"
+                   )
                 }
             }
         }
