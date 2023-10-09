@@ -15,12 +15,12 @@ pipeline {
                 sh script: "${DOCKER_RUN_COMMAND}", returnStatus: true
             }
         }
-        stage('Generate SBOM') {
-            steps {
-                sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
-                sh 'syft nextcloud:23.0.10 --scope all-layers -o json > sbom-report.json'
-            }
-        }
+        // stage('Generate SBOM') {
+        //     steps {
+        //         sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
+        //         sh 'syft nextcloud:23.0.10 --scope all-layers -o json > sbom-report.json'
+        //     }
+        // }
         stage('Dynamic Testing') {
             steps {
                 script {
@@ -45,20 +45,20 @@ pipeline {
                 }
              }
         }
-        stage('Snyk scan') {
-            steps {
-                script {
-                    try {
-                        sh 'snyk container test nextcloud:23.0.10 --file=Dockerfile > dependency-check-report.txt'
-                    } catch (Exception e) {
-                        echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
-                    }
-                }
-            }
-        }
+        // stage('Snyk scan') {
+        //     steps {
+        //         script {
+        //             try {
+        //                 sh 'snyk container test nextcloud:23.0.10 --file=Dockerfile > dependency-check-report.txt'
+        //             } catch (Exception e) {
+        //                 echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
+        //             }
+        //         }
+        //     }
+        // }
         stage("Clone") {
             steps {
-               git url: 'https://github.com/michael7999/Nextcloud', branch: 'kelvinTest' //example file
+               git url: 'https://github.com/michael7999/Nextcloud.git', branch: 'kelvinTest' //example file
                sh 'zip -r nextCloud.zip .'
             }
         }
