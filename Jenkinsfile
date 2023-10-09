@@ -101,9 +101,7 @@ pipeline {
     }
         post {
             always {
-                    archiveArtifacts artifacts: '**/sbom-report.json', allowEmptyArchive: true
-                    archiveArtifacts artifacts: '**/nmap-report.json', allowEmptyArchive: true
-                    archiveArtifacts artifacts: '**/dependency-check-report.txt', allowEmptyArchive: true
+                    
                     sh 'docker stop nextCloud'
                     sh 'docker rm nextCloud'
                 
