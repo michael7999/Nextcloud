@@ -101,7 +101,7 @@ pipeline {
     }
         post {
             always {
-                    rchiveArtifacts artifacts: '**/sbom-report.json', allowEmptyArchive: true
+                    archiveArtifacts artifacts: '**/sbom-report.json', allowEmptyArchive: true
                     archiveArtifacts artifacts: '**/nikto-report.json', allowEmptyArchive: true
                     archiveArtifacts artifacts: '**/nmap-report.json', allowEmptyArchive: true
                     archiveArtifacts artifacts: '**/dependency-check-report.txt', allowEmptyArchive: true
