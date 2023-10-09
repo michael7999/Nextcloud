@@ -15,12 +15,12 @@ pipeline {
                 sh script: "${DOCKER_RUN_COMMAND}", returnStatus: true
             }
         }
-        // stage('Generate SBOM') {
-        //     steps {
-        //         sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
-        //         sh 'syft nextcloud:23.0.10 --scope all-layers -o json > sbom-report.json'
-        //     }
-        // }
+        stage('Generate SBOM') {
+            steps {
+                sh 'curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin'
+                sh 'syft nextcloud:23.0.10 --scope all-layers -o json > sbom-report.json'
+            }
+        }
         stage('Dynamic Testing') {
             steps {
                 script {
@@ -45,40 +45,40 @@ pipeline {
                 }
              }
         }
-        // stage('Snyk scan') {
-        //     steps {
-        //         script {
-        //             try {
-        //                 sh 'snyk container test nextcloud:23.0.10 --file=Dockerfile > dependency-check-report.txt'
-        //             } catch (Exception e) {
-        //                 echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
-        //             }
-        //         }
-        //     }
-        // }
-        stage("Clone") {
+        stage('Snyk scan') {
             steps {
-               git url: 'git@github.com:michael7999/Nextcloud.git', branch: 'kelvinTest' //example file
-            //    sh 'zip -r nextCloud.zip .'
-            }
-        }
-        stage("Scan") {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'codethreat_credentials', usernameVariable: 'username', passwordVariable: 'password')]) {
-                    CodeThreatScan(
-                        ctServer: env.ctServer_URL,
-                        fileName:"nextCloud.zip",
-                        maxNumberOfHigh: 23,
-                        maxNumberOfCritical: 23,
-                        weaknessIs: ".*injection,buffer.over.read,mass.assigment", 
-                        condition: "OR",
-                        project_name: "nextCloudProject",
-                        credentialsId: "codethreat_credentials",
-                        organization_name: "kelvin-ap@github"
-                   )
+                script {
+                    try {
+                        sh 'snyk container test nextcloud:23.0.10 --file=Dockerfile > dependency-check-report.txt'
+                    } catch (Exception e) {
+                        echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
+                    }
                 }
             }
         }
+        // stage("Clone") {
+        //     steps {
+        //        git url: 'git@github.com:michael7999/Nextcloud.git', branch: 'kelvinTest' //example file
+        //     //    sh 'zip -r nextCloud.zip .'
+        //     }
+        // }
+        // stage("Scan") {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'codethreat_credentials', usernameVariable: 'username', passwordVariable: 'password')]) {
+        //             CodeThreatScan(
+        //                 ctServer: env.ctServer_URL,
+        //                 fileName:"nextCloud.zip",
+        //                 maxNumberOfHigh: 23,
+        //                 maxNumberOfCritical: 23,
+        //                 weaknessIs: ".*injection,buffer.over.read,mass.assigment", 
+        //                 condition: "OR",
+        //                 project_name: "nextCloudProject",
+        //                 credentialsId: "codethreat_credentials",
+        //                 organization_name: "kelvin-ap@github"
+        //            )
+        //         }
+        //     }
+        // }
         /*
         stage('Vault'){
             steps {
