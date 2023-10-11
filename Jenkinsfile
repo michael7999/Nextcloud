@@ -8,7 +8,6 @@ pipeline {
         APP_IP = credentials('APP_IP')
         SNYK_TOKEN = credentials('snyk-api-token')
         NIKTO = credentials('nikto_ip_port')
-        VAULT = credentials('vault')
     }
     stages { 
         // stage('Build Docker Image') {
