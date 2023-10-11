@@ -8,6 +8,7 @@ pipeline {
         APP_IP = credentials('APP_IP')
         SNYK_TOKEN = credentials('snyk-api-token')
         NIKTO = credentials('nikto_ip_port')
+        VAULT = credentials('vault')
     }
     stages { 
         // stage('Build Docker Image') {
@@ -85,13 +86,13 @@ pipeline {
             }
         }
         */
-        /*
+        
         stage('Vault'){
             steps {
-                withVault(configuration: [timeout: 60, vaultCredentialId: 'Vault-Jenkins-AppRole', vaultUrl: 'http://127.0.0.1:8200', vaultSecrets: [[ engineVersion: 2, path: 'secret/dev-creds/git-pass', secretValues: 1]] ])
+                withVault(configuration: [timeout: 60, vaultCredentialId: 'VAULT', vaultUrl: 'http://127.0.0.1:8200', vaultSecrets: [[ engineVersion: 2, path: 'secret/dev-creds/git-pass', secretValues: 1]] ])
             }
         }
-        */
+        
         /*stage('Debricked Scan') {
             steps {
                 script {
