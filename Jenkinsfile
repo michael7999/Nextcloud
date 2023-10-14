@@ -28,7 +28,7 @@ pipeline {
                         sh "curl ${NIKTO}"
                         sh "nikto -h ${NIKTO} > nikto-report.json"
                     } catch (Exception e) {
-                        echo "Snyk scan completed with vulnerabilities, but the stage will not fail."
+                        echo "Nikto scan completed with vulnerabilities, but the stage will not fail."
                     } 
                 }                            
             }
